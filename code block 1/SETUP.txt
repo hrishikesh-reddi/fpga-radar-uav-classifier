@@ -1,0 +1,52 @@
+QUANTUM TELECOM ANOMALY DETECTION SYSTEM - SETUP INSTRUCTIONS
+
+==============================================
+QUICK START (2 OPTIONS)
+==============================================
+
+OPTION 1 - DIRECT FILE ACCESS:
+1. Double-click on "quantum-demo.html" file
+2. The application will open in your browser
+3. Adjust parameters and click "Detect Anomalies"
+
+OPTION 2 - LOCAL SERVER (RECOMMENDED):
+1. Open Command Prompt or PowerShell
+2. Navigate to the project folder:
+   cd "C:\Users\chait\Downloads\HACKATHON\code block 1"
+3. Start Python web server:
+   python -m http.server 8000
+4. Open browser and go to: http://localhost:8000/quantum-demo.html
+
+==============================================
+HOW THE DEMO WORKS
+==============================================
+
+YES - The demo is fully functional!
+
+When you click "Detect Anomalies":
+1. Network parameters are processed by 3 quantum models
+2. Each model generates a prediction (Normal/Anomaly)
+3. Confidence scores are calculated for each model
+4. Results are displayed with visual indicators
+
+The models simulate real quantum algorithms:
+- Hybrid QNN: Variational quantum circuit with classical neural network
+- QSVM: Quantum Support Vector Machine with quantum kernel
+- Quantum Autoencoder: Unsupervised anomaly detection
+
+Note: This demo simulates quantum computations for presentation purposes.
+In a production environment, these would connect to actual quantum hardware
+or quantum simulators via PennyLane/PyTorch backend.
+
+==============================================
+FILES INCLUDED
+==============================================
+- quantum-demo.html : Main application
+- README.md : Technical documentation
+- SETUP.txt : This file
+
+==============================================
+REQUIREMENTS
+==============================================
+- Any modern web browser
+- Python 3.x (only for server method)

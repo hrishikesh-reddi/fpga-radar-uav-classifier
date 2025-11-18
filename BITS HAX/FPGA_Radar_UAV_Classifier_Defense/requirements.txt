@@ -1,0 +1,58 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# FPGA Radar UAV Classifier — Python Dependencies
+# BITS Pilani AMD/Xilinx FPGA Hackathon 2026
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# Install with: pip install -r requirements.txt
+#
+# Note: Some packages require specific versions for compatibility.
+#       PyTorch installation may vary by platform (CPU/GPU/MPS).
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Core ML Framework
+torch>=2.0.0,<2.5.0           # PyTorch deep learning framework
+
+# NumPy & SciPy for numerical operations
+numpy>=1.24.0,<2.0.0          # NumPy array operations
+scipy>=1.10.0                 # Scientific computing (used by sklearn)
+
+# Scikit-learn for ML utilities
+scikit-learn>=1.3.0           # Train/test split, metrics
+
+# ONNX Export & Quantization
+onnx>=1.14.0                  # ONNX model format
+onnxruntime>=1.15.0           # ONNX Runtime inference
+onnxruntime-quantization>=1.15.0  # INT8 quantization
+
+# Visualization
+matplotlib>=3.7.0             # Training plots, confusion matrix
+
+# Progress Bars
+tqdm>=4.65.0                  # Progress bars for data loading
+
+# hls4ml for FPGA synthesis
+hls4ml>=0.7.0                 # PyTorch to HLS conversion
+
+# Optional: Kaggle API for dataset download
+# kaggle>=1.6.0               # Uncomment if you need dataset download
+
+# Optional: TensorBoard for training visualization
+# tensorboard>=2.13.0         # Uncomment for TensorBoard support
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Platform-Specific PyTorch Installation
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# CPU Only:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+#
+# CUDA 11.8 (NVIDIA GPU):
+#   pip install torch --index-url https://download.pytorch.org/whl/cu118
+#
+# CUDA 12.1 (NVIDIA GPU):
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121
+#
+# macOS MPS (Apple Silicon):
+#   pip install torch  # (default includes MPS support)
+#
+# ─────────────────────────────────────────────────────────────────────────────

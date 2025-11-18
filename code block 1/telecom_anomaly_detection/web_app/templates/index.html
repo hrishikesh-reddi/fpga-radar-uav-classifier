@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Anomaly Detection</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background: #ffffff;
+            --foreground: #000000;
+            --muted: #f1f5f9;
+            --muted-foreground: #64748b;
+            --border: #e2e8f0;
+            --input: #e2e8f0;
+            --card: #ffffff;
+            --card-foreground: #000000;
+            --popover: #ffffff;
+            --popover-foreground: #000000;
+            --primary: #000000;
+            --primary-foreground: #ffffff;
+            --secondary: #f1f5f9;
+            --secondary-foreground: #000000;
+            --accent: #f1f5f9;
+            --accent-foreground: #000000;
+            --destructive: #ef4444;
+            --destructive-foreground: #ffffff;
+            --ring: #000000;
+            --radius: 0.5rem;
+        }
+        
+        * {
+            border-color: var(--border);
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .container {
+                max-width: 640px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                max-width: 768px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1024px;
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .container {
+                max-width: 1280px;
+            }
+        }
+        
+        @media (min-width: 1536px) {
+            .container {
+                max-width: 1536px;
+            }
+        }
+        
+        /* Header */
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        /* Card */
+        .card {
+            background-color: var(--card);
+            color: var(--card-foreground);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1;
+        }
+        
+        .card-description {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        /* Grid */
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Button */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+            height: 2.5rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            border: 1px solid var(--input);
+            background-color: var(--background);
+            color: var(--foreground);
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: var(--muted);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #000000;
+            border-color: #000000;
+        }
+        
+        .btn:disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        
+        /* Input */
+        .input {
+            display: flex;
+            height: 2.5rem;
+            width: 100%;
+            border-radius: var(--radius);
+            border: 1px solid var(--input);
+            background-color: var(--background);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        .input:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            border-color: var(--ring);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Select */
+        .select {
+            display: flex;
+            height: 2.5rem;
+            width: 100%;
+            border-radius: var(--radius);
+            border: 1px solid var(--input);
+            background-color: var(--background);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Label */
+        .label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        /* Metrics */
+        .metrics-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin-top: 1rem;
+        }
+        
+        .metric-card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .metric-label {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+        
+        /* Alert */
+        .alert {
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-destructive {
+            border-color: var(--destructive);
+            color: var(--destructive);
+        }
+        
+        /* Chart container */
+        .chart-container {
+            height: 300px;
+            margin-top: 1rem;
+            position: relative;
+        }
+        
+        /* Form elements */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid currentColor;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Results section */
+        .results-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            margin-top: 1rem;
+        }
+        
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-brain"></i> Quantum Anomaly Detection
+                </div>
+            </div>
+        </header>
+        
+        <main>
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="card-title">Network Anomaly Detection</h1>
+                    <p class="card-description">Generate network data and detect anomalies using quantum machine learning models</p>
+                </div>
+                
+                <div class="grid">
+                    <div>
+                        <div class="form-group">
+                            <label class="label" for="samples">Number of Samples</label>
+                            <input type="number" id="samples" class="input" value="500" min="100" max="10000">
+                        </div>
+                        
+                        <button id="generate-btn" class="btn btn-primary">
+                            <i class="fas fa-database"></i> Generate Data
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <div class="form-group">
+                            <label class="label" for="model">Select Model</label>
+                            <select id="model" class="select">
+                                <option value="hybrid_qnn">Hybrid Quantum-Classical Neural Network</option>
+                                <option value="qsvm">Quantum Support Vector Machine</option>
+                                <option value="qae">Quantum Autoencoder</option>
+                            </select>
+                        </div>
+                        
+                        <button id="detect-btn" class="btn btn-primary" disabled>
+                            <i class="fas fa-search"></i> Detect Anomalies
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="alert-container"></div>
+                
+                <div id="data-summary" style="display: none;">
+                    <h2 class="card-title" style="margin-top: 2rem;">Data Summary</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="total-samples">0</div>
+                            <div class="metric-label">Total Samples</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="anomalies">0</div>
+                            <div class="metric-label">Anomalies</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="normal">0</div>
+                            <div class="metric-label">Normal</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="anomaly-rate">0%</div>
+                            <div class="metric-label">Anomaly Rate</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="detection-results" style="display: none;">
+                    <h2 class="card-title" style="margin-top: 2rem;">Detection Results</h2>
+                    <div class="results-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="accuracy">0%</div>
+                            <div class="metric-label">Accuracy</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="precision">0%</div>
+                            <div class="metric-label">Precision</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="recall">0%</div>
+                            <div class="metric-label">Recall</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="f1-score">0%</div>
+                            <div class="metric-label">F1-Score</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="card-title" style="margin-top: 1.5rem; font-size: 1.125rem;">Detailed Results</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="total-anomalies">0</div>
+                            <div class="metric-label">Total Anomalies</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="detected-anomalies">0</div>
+                            <div class="metric-label">Detected Anomalies</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="false-positives">0</div>
+                            <div class="metric-label">False Positives</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="detection-rate">0%</div>
+                            <div class="metric-label">Detection Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Quantum Anomaly Detection System</p>
+            <p>Professional toolkit for network security using quantum machine learning</p>
+        </footer>
+    </div>
+    
+    <script>
+        let currentData = null;
+        
+        // Show alert message
+        function showAlert(message, isError = false) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertClass = isError ? 'alert-destructive' : '';
+            alertContainer.innerHTML = `
+                <div class="alert ${alertClass}">
+                    ${message}
+                </div>
+            `;
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Generate data
+        document.getElementById('generate-btn').addEventListener('click', async () => {
+            const samples = parseInt(document.getElementById('samples').value);
+            const button = document.getElementById('generate-btn');
+            const originalText = button.innerHTML;
+            
+            // Show loading state
+            button.innerHTML = '<span class="spinner"></span> Generating Data...';
+            button.disabled = true;
+            
+            try {
+                const response = await fetch('/api/generate_data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        samples: samples
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to generate data');
+                }
+                
+                const data = await response.json();
+                currentData = data;
+                
+                // Update UI
+                document.getElementById('total-samples').textContent = data.summary.total_samples;
+                document.getElementById('anomalies').textContent = data.summary.anomalies;
+                document.getElementById('normal').textContent = data.summary.normal;
+                document.getElementById('anomaly-rate').textContent = data.summary.anomaly_rate.toFixed(1) + '%';
+                
+                // Show data summary
+                document.getElementById('data-summary').style.display = 'block';
+                document.getElementById('detection-results').style.display = 'none';
+                
+                // Enable detection button
+                document.getElementById('detect-btn').disabled = false;
+                
+                showAlert(`Successfully generated ${data.summary.total_samples} network samples with ${data.summary.anomalies} anomalies.`);
+                
+            } catch (error) {
+                console.error('Error generating data:', error);
+                showAlert('Error generating data: ' + error.message, true);
+            } finally {
+                // Restore button
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        });
+        
+        // Detect anomalies
+        document.getElementById('detect-btn').addEventListener('click', async () => {
+            if (!currentData) {
+                showAlert('Please generate data first', true);
+                return;
+            }
+            
+            const model = document.getElementById('model').value;
+            const button = document.getElementById('detect-btn');
+            const originalText = button.innerHTML;
+            
+            // Show loading state
+            button.innerHTML = '<span class="spinner"></span> Detecting Anomalies...';
+            button.disabled = true;
+            
+            try {
+                const response = await fetch('/api/detect_anomalies', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        sample_size: currentData.summary.total_samples
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to detect anomalies');
+                }
+                
+                const result = await response.json();
+                
+                // Update UI
+                document.getElementById('accuracy').textContent = (result.metrics.accuracy * 100).toFixed(1) + '%';
+                document.getElementById('precision').textContent = (result.metrics.precision * 100).toFixed(1) + '%';
+                document.getElementById('recall').textContent = (result.metrics.recall * 100).toFixed(1) + '%';
+                document.getElementById('f1-score').textContent = (result.metrics.f1_score * 100).toFixed(1) + '%';
+                
+                document.getElementById('total-anomalies').textContent = result.detection_results.total_anomalies;
+                document.getElementById('detected-anomalies').textContent = result.detection_results.detected_anomalies;
+                document.getElementById('false-positives').textContent = result.detection_results.false_positives;
+                document.getElementById('detection-rate').textContent = (result.detection_results.detection_rate * 100).toFixed(1) + '%';
+                
+                // Show detection results
+                document.getElementById('detection-results').style.display = 'block';
+                
+                showAlert(`Anomaly detection complete using ${result.model}. Detection rate: ${(result.detection_results.detection_rate * 100).toFixed(1)}%`);
+                
+            } catch (error) {
+                console.error('Error detecting anomalies:', error);
+                showAlert('Error detecting anomalies: ' + error.message, true);
+            } finally {
+                // Restore button
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set focus to samples input
+            document.getElementById('samples').focus();
+        });
+    </script>
+</body>
+</html>
